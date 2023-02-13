@@ -1,0 +1,59 @@
+name: Deploy documentation site
+
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    name: Deploys
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: 'Build and deploy'
+        shell: bash
+        run: |
+          brew install doctave/doctave/doctave
+          doctave build --release --allow-failed-checks
+          
+      - name: '📦 Package artifacts'
+        uses: actions/upload-artifact@v3.1.2
+        with:
+            name: artifacts
+            path: './site'
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: './site'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
