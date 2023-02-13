@@ -24,7 +24,6 @@ jobs:
     name: Deploys
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,12 +41,6 @@ jobs:
         run: |
           brew install doctave/doctave/doctave
           doctave build --release --allow-failed-checks
-          
-      - name: '📦 Package artifacts'
-        uses: actions/upload-artifact@v3.1.2
-        with:
-            name: artifacts
-            path: './site'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
