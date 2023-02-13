@@ -29,24 +29,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Homebrew
-        id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+      # - name: Set up Homebrew
+      #   id: set-up-homebrew
+      #   uses: Homebrew/actions/setup-homebrew@master
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
-      - name: 'Build and deploy'
-        shell: bash
-        run: |
-          brew install doctave/doctave/doctave
-          doctave build --release --allow-failed-checks
+      # - name: 'Build and deploy'
+      #   shell: bash
+      #   run: |
+      #     brew install doctave/doctave/doctave
+      #     doctave build --release --allow-failed-checks
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: './site'
+          path: './docs'
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
